@@ -51,7 +51,7 @@ dist_sort_size_t test_rebalance_datagen(dist_sort_t **thedata, dist_sort_size_t 
 	*mycount = local_N;
 	*globalcount = global_N;
 }
-
+/*
 dist_sort_size_t test_splitters_datagen(dist_sort_t **thedata, dist_sort_size_t *mycount, dist_sort_size_t *globalcount, int mode ){
 	// Get number of processes
 	int rank, num_processors;
@@ -151,7 +151,7 @@ dist_sort_size_t splitter_correctness_datagen(dist_sort_t **thedata, dist_sort_s
 	*mycount = local_N;
 	*globalcount = global_N;
 }
-
+*/
 TEST(rebalance, correct){
 	const int num_iterations = 1;
 	// Get number of processes
@@ -249,7 +249,7 @@ TEST(rebalance, balanced){
 	}// End of for:num_iterations
 }
 
-
+/*
 TEST(findSplitters, balanced){
 
 	const int num_iterations = 1;
@@ -392,7 +392,7 @@ TEST(moveData, correct){
 		}
 	}
 }
-
+*/
 TEST(sort, correct){
 	const dist_sort_size_t sort_test_size = 1234;
 	// Get number of processes

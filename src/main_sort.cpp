@@ -157,12 +157,23 @@ int main(int argc, char **argv) {
 	MPI_PRINT("\nRebalancing...");
 	start_time = std::chrono::high_resolution_clock::now();
 	MPI_Barrier(MPI_COMM_WORLD);
+	std::cout<<"Here in Rebalancing part"<<std::endl;
 	rebalance(starting_data, local_N, &rebalanced_data, &rebalanced_data_size);
+	std::cout<<"Here in Rebalancing part"<<std::endl;
 	MPI_Barrier(MPI_COMM_WORLD);
 	end_time = std::chrono::high_resolution_clock::now();
 	rebalance_time = end_time - start_time;
 	MPI_PRINT("Done.\n");
-
+    
+	std::cout<<"Here in Rebalancing part"<<std::endl;
+	if(rank==0)
+	{
+		std::cout<<"Data from main"<<std::endl;
+		for(int i=0;i<rebalanced_data_size && i<10;i++)
+		{
+			std::cout<<rebalanced_data[i]<<std::endl;
+		}
+	}
 	uint64_t rebalance_checksum = distributed_checksum(rebalanced_data, rebalanced_data_size, confirm_mask, confirm_modulus, MPI_COMM_WORLD);
 
 	if (gen_checksum != rebalance_checksum) {
