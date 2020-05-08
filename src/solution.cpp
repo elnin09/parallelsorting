@@ -77,8 +77,8 @@ void rebalance(const dist_sort_t *data, const dist_sort_size_t myDataCount, dist
 
 bool tolerance(dist_sort_t a,dist_sort_t b)
 {
-	dist_sort_t lowerbound = b*0.999;
-	dist_sort_t upperbound = b*1.001;
+	dist_sort_t lowerbound = b*0.9997;
+	dist_sort_t upperbound = b*1.0003;
 
 	if(a>lowerbound && a<upperbound)
 	{
