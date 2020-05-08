@@ -306,6 +306,7 @@ void moveData(const dist_sort_t *const sendData, const dist_sort_size_t sDataCou
 
     *recvData = receivedbuffer;
 	*rDataCount = counts[rank];
+
     MPI_Win_free(&win);
 
 
