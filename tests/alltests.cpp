@@ -249,9 +249,9 @@ TEST(rebalance, balanced){
 	}// End of for:num_iterations
 }
 
-
+/*
 TEST(findSplitters, balanced){
-
+*/
 	const int num_iterations = 1;
 	const double allowable_bin_deviation = 0.01;
 	// Get number of processes
@@ -391,6 +391,55 @@ TEST(moveData, correct){
 			free(moved_data);
 		}
 	}
+}
+
+
+TEST(findSplitters, balanced){
+
+        const int num_iterations = 1;
+        const double allowable_bin_deviation = 0.01;
+        // Get number of processes
+        int rank, nProcs;
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        MPI_Comm_size(MPI_COMM_WORLD, &nProcs);
+
+
+        dist_sort_t *test_data;
+        dist_sort_size_t test_data_size;
+        dist_sort_size_t global_size;
+
+        dist_sort_t *test_splitters;
+        dist_sort_size_t *test_counts;
+        int num_test_splitters;
+
+
+        for (int i = 1; i < nProcs*3; i++){//may become a loop later, ensure scoping is good now.
+                num_test_splitters = i;
+                test_splitters = (dist_sort_t*)malloc(num_test_splitters*sizeof(dist_sort_t));
+                test_counts = (dist_sort_size_t*)malloc(num_test_splitters*sizeof(dist_sort_size_t));
+
+                test_splitters_datagen(&test_data, &test_data_size, &global_size, 0 );//Uniform
+
+                //findSpliters expects sorted data, at least according to our API.
+                std::sort(test_data,test_data+test_data_size);
+
+                TEST_TIMEOUT_BEGIN
+                findSplitters(test_data, test_data_size, test_splitters, test_counts, num_test_splitters);
+                TEST_TIMEOUT_FAIL_END(SPLITTERS_TIMEOUT_S*1000)
+
+                long double avg_size = (long double)global_size / (long double)i;
+                if(rank == 0){
+                        for(int i = 0;i<num_test_splitters;++i){
+                                long double bin_deviation = fabs(test_counts[i] - avg_size)/avg_size;
+                                EXPECT_LE(bin_deviation,allowable_bin_deviation) << "Problem with quantiles in bin "<<i<<".";
+                                if(bin_deviation > allowable_bin_deviation) break;
+                        }
+                }
+
+                free(test_data);
+                free(test_splitters);
+                free(test_counts);
+        }
 }
 
 TEST(sort, correct){
