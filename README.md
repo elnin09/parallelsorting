@@ -1,4 +1,4 @@
 # README
 
 
-## Histogram Sorting in a distributed environment.
+### Histogram Sorting in a distributed environment.
